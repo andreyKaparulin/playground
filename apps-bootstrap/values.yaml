@@ -3,7 +3,7 @@ spec:
     name: in-cluster
 # it's argocd's namespace
 namespace: argocd
-project: appcenter
+project: playground
 
 frontend:
   repoURL: https://github.com/andreyKaparulin/playground
