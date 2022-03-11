@@ -1,0 +1,13 @@
+spec:
+  destination:
+    name: in-cluster
+# it's argocd's namespace
+namespace: argocd
+project: appcenter
+
+frontend:
+  repoURL: https://github.com/andreyKaparulin/playground
+  path: apps-bootstrap
+  namespace: default
+  targetRevision: master
+  playgroundChartPath: playground/charts/playground

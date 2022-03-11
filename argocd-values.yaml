@@ -1,0 +1,58 @@
+installCRDs: false
+server:
+  config:
+    repositories: |
+      - url: https://github.com/andreyKaparulin/playground
+  additionalProjects:
+    - name: playground
+      namespace: argocd
+      description: playground
+      clusterResourceWhitelist:
+        - group: '*'
+          kind: '*'
+      sourceRepos:
+        - '*'
+      destinations:
+        - namespace: '*'
+          server: https://kubernetes.default.svc
+  additionalApplications:
+    - name: apps-bootstrap
+      namespace: argocd
+      destination:
+        name: in-cluster
+        namespace: kube-system
+      project: playground
+      source:
+        path: apps-bootstrap
+        repoURL: https://github.com/andreyKaparulin/playground
+        targetRevision: master
+        helm:
+          version: v3
+          values: |
+            dex:
+              enabled: false
+            installCRDs: false
+            controller:
+              metrics:
+                enabled: true
+                serviceMonitor:
+                  enabled: true
+                  namespace: monitoring
+            repoServer:
+              metrics:
+                enabled: true
+                serviceMonitor:
+                  enabled: true
+                  namespace: monitoring
+            server:
+              metrics:
+                enabled: true
+                serviceMonitor:
+                  enabled: true
+                  namespace: monitoring
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
