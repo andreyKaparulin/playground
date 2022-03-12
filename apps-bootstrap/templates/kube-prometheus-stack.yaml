@@ -17,6 +17,11 @@ spec:
       values: |
         prometheus:
           prometheusSpec:
+            tolerations:
+            - key: "role"
+              operator: "Equal"
+              value: "master"
+              effect: "NoSchedule"
             podMonitorSelectorNilUsesHelmValues: false
             serviceMonitorSelectorNilUsesHelmValues: false
             storageSpec:
@@ -27,10 +32,29 @@ spec:
                   resources:
                     requests:
                       storage: 20Gi
+        alertmanager:
+          alertmanagerSpec:
+            tolerations:
+            - key: "role"
+              operator: "Equal"
+              value: "master"
+              effect: "NoSchedule"
         prometheusOperator:
+          tolerations:
+          - key: "role"
+            operator: "Equal"
+            value: "master"
+            effect: "NoSchedule"
           tls:
             enabled: false
-          hostNetwork: true
+          # hostNetwork: true
+          admissionWebhooks:
+            patch:
+              tolerations:
+              - key: "role"
+                operator: "Equal"
+                value: "master"
+                effect: "NoSchedule"
         grafana:
           additionalDataSources:
           - name: loki
