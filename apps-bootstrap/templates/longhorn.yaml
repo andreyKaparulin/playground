@@ -1,31 +1,31 @@
-#apiVersion: argoproj.io/v1alpha1
-#kind: Application
-#metadata:
-#  name: longhorn
-#  namespace: {{ .Values.namespace }}
-#  finalizers:
-#    - resources-finalizer.argocd.argoproj.io
-#spec:
-#  destination:
-#    namespace: longhorn-system
-#    name: {{ .Values.spec.destination.name }}
-#  project: {{ .Values.project }}
-#  source:
-#    chart: longhorn
-#    repoURL: https://charts.longhorn.io
-#    targetRevision: 'v1.1.0'
-#    helm:
-#      version: v3
-#      values: |-
-#        persistence:
-#          defaultClassReplicaCount: 1
-#        defaultSettings:
-#          defaultReplicaCount: 1
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: longhorn
+  namespace: {{ .Values.namespace }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: longhorn-system
+    name: {{ .Values.spec.destination.name }}
+  project: {{ .Values.project }}
+  source:
+    chart: longhorn
+    repoURL: https://charts.longhorn.io
+    targetRevision: 'v1.2.3'
+    helm:
+      version: v3
+      values: |-
+        persistence:
+          defaultClassReplicaCount: 1
+        defaultSettings:
+          defaultReplicaCount: 1
 #          defaultDataLocality: best-effort
 #          storageOverProvisioningPercentage: 100
-#  syncPolicy:
-#    automated:
-#      prune: true
-#      selfHeal: true
-#    syncOptions:
-#      - CreateNamespace=true
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
