@@ -47,7 +47,7 @@ spec:
             effect: "NoSchedule"
           tls:
             enabled: false
-          # hostNetwork: true
+            hostNetwork: true
           admissionWebhooks:
             patch:
               tolerations:
