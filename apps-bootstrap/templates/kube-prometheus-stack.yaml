@@ -86,7 +86,7 @@ spec:
 #        - {{ printf "prometheus-rules/%s.yaml" . | $.Files.Get | indent 10  | trim }}
 #    {{- end }}
     repoURL: https://prometheus-community.github.io/helm-charts
-    targetRevision: '14.3.0'
+    targetRevision: '33.2.0'
   syncPolicy:
     automated:
       prune: true
