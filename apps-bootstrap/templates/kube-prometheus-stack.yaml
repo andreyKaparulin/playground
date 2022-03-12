@@ -30,6 +30,7 @@ spec:
         prometheusOperator:
           tls:
             enabled: false
+          hostNetwork: true
         grafana:
           additionalDataSources:
           - name: loki
