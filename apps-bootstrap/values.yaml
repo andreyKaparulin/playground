@@ -5,6 +5,9 @@ spec:
 namespace: argocd
 project: playground
 
+prometheusRules:
+  - redis
+
 frontend:
   repoURL: https://github.com/andreyKaparulin/playground
   path: apps-bootstrap
