@@ -17,44 +17,17 @@ spec:
       values: |
         prometheus:
           prometheusSpec:
-            tolerations:
-            - key: "role"
-              operator: "Equal"
-              value: "master"
-              effect: "NoSchedule"
-            podMonitorSelectorNilUsesHelmValues: false
             serviceMonitorSelectorNilUsesHelmValues: false
             storageSpec:
               volumeClaimTemplate:
                 spec:
-                  storageClassName: longhorn
                   accessModes: ["ReadWriteOnce"]
                   resources:
                     requests:
-                      storage: 20Gi
-        alertmanager:
-          alertmanagerSpec:
-            tolerations:
-            - key: "role"
-              operator: "Equal"
-              value: "master"
-              effect: "NoSchedule"
+                      storage: 5Gi
         prometheusOperator:
-          tolerations:
-          - key: "role"
-            operator: "Equal"
-            value: "master"
-            effect: "NoSchedule"
           tls:
             enabled: false
-            hostNetwork: true
-          admissionWebhooks:
-            patch:
-              tolerations:
-              - key: "role"
-                operator: "Equal"
-                value: "master"
-                effect: "NoSchedule"
         grafana:
           additionalDataSources:
           - name: loki
@@ -86,10 +59,11 @@ spec:
         - {{ printf "prometheus-rules/%s.yaml" . | $.Files.Get | indent 10  | trim }}
         {{- end }}
     repoURL: https://prometheus-community.github.io/helm-charts
-    targetRevision: '23.3.1'
+    targetRevision: '14.3.0'
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+
