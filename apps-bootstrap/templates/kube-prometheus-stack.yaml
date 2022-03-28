@@ -26,6 +26,7 @@ spec:
                     requests:
                       storage: 5Gi
         prometheusOperator:
+          hostNetwork: true
           tolerations:
           - key: "role"
             operator: "Equal"
