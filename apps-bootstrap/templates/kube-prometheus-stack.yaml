@@ -5,8 +5,6 @@ metadata:
   namespace: {{ .Values.namespace }}
   finalizers:
     - resources-finalizer.argocd.argoproj.io
-  annotations:
-    argocd.argoproj.io/sync-options: Replace=true
 spec:
   destination:
     namespace: monitoring
@@ -88,7 +86,7 @@ spec:
         - {{ printf "prometheus-rules/%s.yaml" . | $.Files.Get | indent 10  | trim }}
         {{- end }}
     repoURL: https://prometheus-community.github.io/helm-charts
-    targetRevision: '33.2.0'
+    targetRevision: '23.3.1'
   syncPolicy:
     automated:
       prune: true
