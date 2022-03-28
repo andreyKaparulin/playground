@@ -26,8 +26,20 @@ spec:
                     requests:
                       storage: 5Gi
         prometheusOperator:
+          tolerations:
+          - key: "role"
+            operator: "Equal"
+            value: "master"
+            effect: "NoSchedule"
           tls:
             enabled: false
+          admissionWebhooks:
+            patch:
+              tolerations:
+              - key: "role"
+                operator: "Equal"
+                value: "master"
+                effect: "NoSchedule"
         grafana:
           additionalDataSources:
           - name: loki
