@@ -1,94 +1,94 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: kube-prometheus-stack
-  namespace: {{ .Values.namespace }}
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
-spec:
-  destination:
-    namespace: monitoring
-    name: {{ .Values.spec.destination.name }}
-  project: {{ .Values.project }}
-  source:
-    chart: kube-prometheus-stack
-    helm:
-      version: v3
-      values: |
-        prometheus:
-          prometheusSpec:
-            tolerations:
-            - key: "role"
-              operator: "Equal"
-              value: "master"
-              effect: "NoSchedule"
-            podMonitorSelectorNilUsesHelmValues: false
-            serviceMonitorSelectorNilUsesHelmValues: false
-            storageSpec:
-              volumeClaimTemplate:
-                spec:
-                  storageClassName: longhorn
-                  accessModes: ["ReadWriteOnce"]
-                  resources:
-                    requests:
-                      storage: 5Gi
-        alertmanager:
-          alertmanagerSpec:
-            tolerations:
-            - key: "role"
-              operator: "Equal"
-              value: "master"
-              effect: "NoSchedule"
-        prometheusOperator:
-          tolerations:
-          - key: "role"
-            operator: "Equal"
-            value: "master"
-            effect: "NoSchedule"
-          tls:
-            enabled: false
-          admissionWebhooks:
-            patch:
-              tolerations:
-              - key: "role"
-                operator: "Equal"
-                value: "master"
-                effect: "NoSchedule"
-        grafana:
-          additionalDataSources:
-          - name: loki
-            access: proxy
-            basicAuth: false
-            basicAuthPassword:
-            basicAuthUser:
-            editable: true
-            jsonData:
-                tlsSkipVerify: true
-            orgId: 1
-            type: loki
-            url: http://loki:3100
-            version: 1
-          - name: graphite
-            access: proxy
-            basicAuth: false
-            basicAuthPassword:
-            basicAuthUser:
-            editable: true
-            jsonData:
-                tlsSkipVerify: true
-            orgId: 1
-            type: graphite
-            url: http://graphite:8080
-            version: 1
-        additionalPrometheusRules:
-        {{- range .Values.prometheusRules }}
-        - {{ printf "prometheus-rules/%s.yaml" . | $.Files.Get | indent 10  | trim }}
-        {{- end }}
-    repoURL: https://prometheus-community.github.io/helm-charts
-    targetRevision: '33.2.0'
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
+#apiVersion: argoproj.io/v1alpha1
+#kind: Application
+#metadata:
+#  name: kube-prometheus-stack
+#  namespace: {{ .Values.namespace }}
+#  finalizers:
+#    - resources-finalizer.argocd.argoproj.io
+#spec:
+#  destination:
+#    namespace: monitoring
+#    name: {{ .Values.spec.destination.name }}
+#  project: {{ .Values.project }}
+#  source:
+#    chart: kube-prometheus-stack
+#    helm:
+#      version: v3
+#      values: |
+#        prometheus:
+#          prometheusSpec:
+#            tolerations:
+#            - key: "role"
+#              operator: "Equal"
+#              value: "master"
+#              effect: "NoSchedule"
+#            podMonitorSelectorNilUsesHelmValues: false
+#            serviceMonitorSelectorNilUsesHelmValues: false
+#            storageSpec:
+#              volumeClaimTemplate:
+#                spec:
+#                  storageClassName: longhorn
+#                  accessModes: ["ReadWriteOnce"]
+#                  resources:
+#                    requests:
+#                      storage: 5Gi
+#        alertmanager:
+#          alertmanagerSpec:
+#            tolerations:
+#            - key: "role"
+#              operator: "Equal"
+#              value: "master"
+#              effect: "NoSchedule"
+#        prometheusOperator:
+#          tolerations:
+#          - key: "role"
+#            operator: "Equal"
+#            value: "master"
+#            effect: "NoSchedule"
+#          tls:
+#            enabled: false
+#          admissionWebhooks:
+#            patch:
+#              tolerations:
+#              - key: "role"
+#                operator: "Equal"
+#                value: "master"
+#                effect: "NoSchedule"
+#        grafana:
+#          additionalDataSources:
+#          - name: loki
+#            access: proxy
+#            basicAuth: false
+#            basicAuthPassword:
+#            basicAuthUser:
+#            editable: true
+#            jsonData:
+#                tlsSkipVerify: true
+#            orgId: 1
+#            type: loki
+#            url: http://loki:3100
+#            version: 1
+#          - name: graphite
+#            access: proxy
+#            basicAuth: false
+#            basicAuthPassword:
+#            basicAuthUser:
+#            editable: true
+#            jsonData:
+#                tlsSkipVerify: true
+#            orgId: 1
+#            type: graphite
+#            url: http://graphite:8080
+#            version: 1
+#        additionalPrometheusRules:
+#        {{- range .Values.prometheusRules }}
+#        - {{ printf "prometheus-rules/%s.yaml" . | $.Files.Get | indent 10  | trim }}
+#        {{- end }}
+#    repoURL: https://prometheus-community.github.io/helm-charts
+#    targetRevision: '33.2.0'
+#  syncPolicy:
+#    automated:
+#      prune: true
+#      selfHeal: true
+#    syncOptions:
+#      - CreateNamespace=true
